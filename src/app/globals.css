@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Eyooly Brand Colors */
+    --carbon: #080e0a;
+    --ink: #0f1110;
+    --cream: #f5f2ed;
+    --terracotta: #c9735a;
+    --sage: #b7baad;
+
+    /* shadcn/ui tokens mapped to Eyooly palette */
+    --background: 40 20% 95%;       /* cream */
+    --foreground: 150 30% 5%;       /* carbon */
+    --card: 0 0% 100%;
+    --card-foreground: 150 30% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 30% 5%;
+    --primary: 14 44% 57%;          /* terracotta */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 90 5% 70%;         /* sage */
+    --secondary-foreground: 150 30% 5%;
+    --muted: 40 15% 90%;
+    --muted-foreground: 150 10% 40%;
+    --accent: 40 15% 90%;
+    --accent-foreground: 150 30% 5%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 10% 85%;
+    --input: 40 10% 85%;
+    --ring: 14 44% 57%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 150 30% 5%;
+    --foreground: 40 20% 95%;
+    --card: 150 25% 7%;
+    --card-foreground: 40 20% 95%;
+    --popover: 150 25% 7%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 14 44% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 90 5% 20%;
+    --secondary-foreground: 40 20% 95%;
+    --muted: 150 20% 12%;
+    --muted-foreground: 90 5% 55%;
+    --accent: 150 20% 12%;
+    --accent-foreground: 40 20% 95%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 15% 18%;
+    --input: 150 15% 18%;
+    --ring: 14 44% 57%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  /* ─── Gradients ─────────────────────────────────────────────────────── */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #c9735a 0%, #e8956d 50%, #c9735a 100%);
+  }
+
+  .gradient-radial-warm {
+    background: radial-gradient(circle at top right, rgba(201, 115, 90, 0.15) 0%, transparent 70%);
+  }
+
+  /* ─── Glass & Backdrop ──────────────────────────────────────────────── */
+  .glass-header {
+    background: rgba(8, 14, 10, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(245, 242, 237, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ─── Shadows ───────────────────────────────────────────────────────── */
+  .shadow-premium {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .shadow-soft {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .shadow-glow-terracotta {
+    box-shadow: 0 0 40px rgba(201, 115, 90, 0.2), 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ─── Card Interactions ─────────────────────────────────────────────── */
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-hover:hover {
+    @apply -translate-y-2 shadow-premium;
+  }
+
+  .card-subtle-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-subtle-hover:hover {
+    @apply shadow-soft;
+  }
+
+  /* ─── Button Interactions ───────────────────────────────────────────── */
+  .btn-press {
+    @apply transition-all duration-150 ease-out;
+  }
+  .btn-press:active {
+    transform: scale(0.96);
+  }
+  .btn-press:focus-visible {
+    @apply outline-none ring-2 ring-terracotta ring-offset-2 ring-offset-carbon;
+  }
+
+  /* ─── Section Spacing ──────────────────────────────────────────────── */
+  .section-py {
+    @apply py-20 lg:py-28;
+  }
+
+  .section-py-tight {
+    @apply py-16 lg:py-24;
+  }
+
+  /* ─── Animations ───────────────────────────────────────────────────── */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  /* ─── Status Badges ────────────────────────────────────────────────── */
+  .status-pending  { @apply bg-amber-100 text-amber-700 border border-amber-200; }
+  .status-approved { @apply bg-emerald-100 text-emerald-700 border border-emerald-200; }
+  .status-rejected { @apply bg-red-100 text-red-700 border border-red-200; }
+  .status-active   { @apply bg-blue-100 text-blue-700 border border-blue-200; }
+  .status-completed{ @apply bg-gray-100 text-gray-600 border border-gray-200; }
+  .status-cancelled{ @apply bg-red-50 text-red-500 border border-red-100; }
+
+  /* ─── Typography Utilities ─────────────────────────────────────────── */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* ─── Responsive Utilities ─────────────────────────────────────────── */
+  .container-safe {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { 
+  width: 8px; 
+  height: 8px; 
+}
+::-webkit-scrollbar-track { 
+  background: rgba(8, 14, 10, 0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb { 
+  background: rgba(183, 186, 173, 0.6);
+  border-radius: 4px;
+  border: 2px solid rgba(8, 14, 10, 0.5);
+}
+::-webkit-scrollbar-thumb:hover { 
+  background: rgba(201, 115, 90, 0.8);
+}
+
+/* ─── Focus Ring ────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #c9735a;
+  outline-offset: 2px;
+}
+
+/* ─── Selection ─────────────────────────────────────────────────────────── */
+::selection {
+  background-color: rgba(201, 115, 90, 0.2);
+  color: #f5f2ed;
+}
