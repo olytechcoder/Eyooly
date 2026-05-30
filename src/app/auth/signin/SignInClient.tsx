@@ -4,13 +4,47 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function SignInClient() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const { locale } = useLanguage();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState("");
+
+  const t = {
+    es: {
+      title: "Inicia sesión",
+      subtitle: "Accede a tu cuenta Eyooly",
+      email: "Correo electrónico",
+      sendBtn: "Enviar enlace de acceso",
+      noAccount: "¿No tienes cuenta?",
+      register: "Regístrate aquí",
+      checkEmail: "Revisa tu email",
+      emailSent: "Te hemos enviado un enlace de acceso a",
+      spamFolder: "Si no ves el email, revisa tu carpeta de spam.",
+      success: "Te hemos enviado un enlace de acceso. Revisa tu correo y la carpeta de spam.",
+      error: "No pudimos enviar el enlace de acceso. Inténtalo de nuevo o contáctanos por WhatsApp.",
+    },
+    en: {
+      title: "Sign in",
+      subtitle: "Access your Eyooly account",
+      email: "Email",
+      sendBtn: "Send sign-in link",
+      noAccount: "Don't have an account?",
+      register: "Register here",
+      checkEmail: "Check your email",
+      emailSent: "We sent you a sign-in link to",
+      spamFolder: "If you don't see the email, check your spam folder.",
+      success: "We sent you a sign-in link. Check your inbox and spam folder.",
+      error: "We could not send the sign-in link. Please try again or contact us on WhatsApp.",
+    },
+  };
+
+  const texts = t[locale as keyof typeof t] || t.es;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,13 +71,11 @@ export default function SignInClient() {
       <div className="min-h-screen bg-carbon flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <Mail className="h-12 w-12 text-terracotta mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-cream mb-2">Revisa tu email</h2>
-          <p className="text-cream/60 mb-6">
-            Te hemos enviado un enlace de inicio de sesión a <strong>{email}</strong>
+          <h2 className="text-2xl font-bold text-cream mb-2">{texts.checkEmail}</h2>
+          <p className="text-cream/60 mb-2">
+            {texts.emailSent} <strong>{email}</strong>
           </p>
-          <p className="text-cream/40 text-sm">
-            Si no ves el email, revisa tu carpeta de spam.
-          </p>
+          <p className="text-cream/40 text-sm">{texts.spamFolder}</p>
         </div>
       </div>
     );
@@ -54,7 +86,7 @@ export default function SignInClient() {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-cream mb-2">Eyooly</h1>
-          <p className="text-cream/60">Inicia sesión en tu cuenta</p>
+          <p className="text-cream/60">{texts.subtitle}</p>
         </div>
 
         {error && (
@@ -91,9 +123,9 @@ export default function SignInClient() {
         </form>
 
         <p className="text-center text-cream/60 text-sm mt-6">
-          ¿No tienes cuenta?{" "}
+          {texts.noAccount}{" "}
           <Link href="/auth/register" className="text-terracotta hover:underline">
-            Regístrate aquí
+            {texts.register}
           </Link>
         </p>
       </div>
