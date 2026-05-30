@@ -68,14 +68,21 @@ export default function SignInClient() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-carbon flex items-center justify-center p-4">
+      <div className="min-h-screen bg-carbon flex items-center justify-center p-4 pt-24">
         <div className="text-center max-w-md">
           <Mail className="h-12 w-12 text-terracotta mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-cream mb-2">{texts.checkEmail}</h2>
-          <p className="text-cream/60 mb-2">
+          <p className="text-cream/60 mb-6">
             {texts.emailSent} <strong>{email}</strong>
           </p>
-          <p className="text-cream/40 text-sm">{texts.spamFolder}</p>
+          <p className="text-cream/40 text-sm mb-8">{texts.spamFolder}</p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-terracotta hover:text-terracotta/80 font-medium transition-colors"
+          >
+            <ArrowRight className="w-4 h-4 rotate-180" />
+            {locale === "es" ? "Volver al inicio" : "Back to home"}
+          </Link>
         </div>
       </div>
     );

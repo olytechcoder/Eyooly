@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -27,13 +27,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Map account type to enum
+    const accountTypeMap: Record<string, string> = {
+      "Comprador": "BUYER",
+      "Buyer": "BUYER",
+      "Vendedor de marketplace": "MARKETPLACE_VENDOR",
+      "Marketplace vendor": "MARKETPLACE_VENDOR",
+      "Vendedor ecommerce": "ECOMMERCE_VENDOR",
+      "Ecommerce vendor": "ECOMMERCE_VENDOR",
+      "Restaurante / negocio de comida": "RESTAURANT",
+      "Restaurant / food business": "RESTAURANT",
+      "Repartidor / dispatch": "DISPATCH_PARTNER",
+      "Dispatch / delivery partner": "DISPATCH_PARTNER",
+      "Conductor": "DRIVER",
+      "Driver": "DRIVER",
+    };
+
+    const mappedAccountType = (accountTypeMap[accountType] || "BUYER") as any;
+
     // Create new user with account type
     const user = await prisma.user.create({
       data: {
         email,
         name: fullName,
         phone: whatsapp,
-        role: "USER",
+        role: "USER" as any,
+        accountType: mappedAccountType,
         emailVerified: null,
       },
     });

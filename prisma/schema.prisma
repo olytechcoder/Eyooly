@@ -62,6 +62,7 @@ model User {
   city          String?
   bio           String?
   role          UserRole  @default(USER)
+  accountType   AccountType @default(BUYER)
   verified      Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -75,6 +76,16 @@ model User {
 
 enum UserRole {
   USER
+  ADMIN
+}
+
+enum AccountType {
+  BUYER
+  MARKETPLACE_VENDOR
+  ECOMMERCE_VENDOR
+  RESTAURANT
+  DISPATCH_PARTNER
+  DRIVER
   ADMIN
 }
 
