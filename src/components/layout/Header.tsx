@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const LOCALES: { code: Locale; label: string; flag: string }[] = [
   { code: "es", label: "Español", flag: "🇬🇶" },
   { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
 ];
 
 export default function Header() {
@@ -63,7 +64,7 @@ export default function Header() {
               width={160}
               height={48}
               priority
-              className="h-10 w-auto object-contain lg:h-11 transition-all duration-300"
+              className="h-10 w-auto object-contain lg:h-11"
               style={{ maxWidth: "160px" }}
             />
           </Link>
@@ -75,10 +76,10 @@ export default function Header() {
                 key={href}
                 href={href}
                 className={cn(
-                  "px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  "px-3.5 py-2 rounded-lg text-sm font-medium transition-colors",
                   pathname === href
-                    ? "text-terracotta bg-terracotta/10 border border-terracotta/20"
-                    : "text-cream/70 hover:text-cream hover:bg-white/8 border border-transparent"
+                    ? "text-terracotta bg-terracotta/10"
+                    : "text-cream/70 hover:text-cream hover:bg-white/8"
                 )}
               >
                 {label}
@@ -92,23 +93,23 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={() => { setLangOpen(!langOpen); setUserOpen(false); }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-cream/70 hover:text-cream hover:bg-white/8 transition-colors border border-transparent hover:border-white/10"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-cream/70 hover:text-cream hover:bg-white/8 transition-colors"
               >
                 <Globe className="h-4 w-4" />
                 <span>{currentLang.flag} {currentLang.code.toUpperCase()}</span>
-                <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", langOpen && "rotate-180")} />
+                <ChevronDown className={cn("h-3 w-3 transition-transform", langOpen && "rotate-180")} />
               </button>
               {langOpen && (
-                <div className="absolute right-0 top-full mt-2 bg-carbon/95 border border-white/10 rounded-xl shadow-premium overflow-hidden w-44 py-1.5 backdrop-blur-xl">
+                <div className="absolute right-0 top-full mt-1 bg-ink border border-white/10 rounded-xl shadow-xl overflow-hidden w-40 py-1">
                   {LOCALES.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => { setLocale(l.code); setLangOpen(false); }}
                       className={cn(
-                        "w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-all duration-200",
+                        "w-full flex items-center gap-2.5 px-3.5 py-2 text-sm transition-colors",
                         locale === l.code
-                          ? "text-terracotta bg-terracotta/10 border-l-2 border-terracotta"
-                          : "text-cream/70 hover:text-cream hover:bg-white/8 border-l-2 border-transparent"
+                          ? "text-terracotta bg-terracotta/10"
+                          : "text-cream/70 hover:text-cream hover:bg-white/8"
                       )}
                     >
                       <span>{l.flag}</span>
@@ -123,16 +124,16 @@ export default function Header() {
               <div className="relative">
                 <button
                   onClick={() => { setUserOpen(!userOpen); setLangOpen(false); }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-cream/70 hover:text-cream hover:bg-white/8 transition-colors border border-transparent hover:border-white/10"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-cream/70 hover:text-cream hover:bg-white/8 transition-colors"
                 >
-                  <div className="w-7 h-7 rounded-full bg-terracotta/20 text-terracotta text-xs font-bold flex items-center justify-center border border-terracotta/30">
+                  <div className="w-7 h-7 rounded-full bg-terracotta/20 text-terracotta text-xs font-bold flex items-center justify-center">
                     {user?.name?.[0]?.toUpperCase() ?? "U"}
                   </div>
                   <span className="max-w-[100px] truncate">{user?.name ?? "Mi cuenta"}</span>
-                  <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", userOpen && "rotate-180")} />
+                  <ChevronDown className={cn("h-3 w-3 transition-transform", userOpen && "rotate-180")} />
                 </button>
                 {userOpen && (
-                  <div className="absolute right-0 top-full mt-2 bg-carbon/95 border border-white/10 rounded-xl shadow-premium overflow-hidden w-48 py-1.5 backdrop-blur-xl">
+                  <div className="absolute right-0 top-full mt-1 bg-ink border border-white/10 rounded-xl shadow-xl overflow-hidden w-48 py-1">
                     <Link href="/dashboard" onClick={() => setUserOpen(false)}
                       className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-cream/70 hover:text-cream hover:bg-white/8 transition-colors">
                       <LayoutDashboard className="h-4 w-4" /> {t("nav.dashboard")}
@@ -153,13 +154,13 @@ export default function Header() {
               </div>
             ) : (
               <Link href="/auth/signin"
-                className="px-3.5 py-2 rounded-lg text-sm font-medium text-cream/70 hover:text-cream hover:bg-white/8 transition-colors border border-transparent hover:border-white/10">
+                className="px-3.5 py-2 rounded-lg text-sm font-medium text-cream/70 hover:text-cream hover:bg-white/8 transition-colors">
                 {t("nav.login")}
               </Link>
             )}
 
             <Link href="/publicar-anuncio"
-              className="px-4 py-2 rounded-full text-sm font-semibold bg-terracotta hover:bg-terracotta/90 text-white transition-colors btn-press shadow-lg shadow-terracotta/25 border border-terracotta/50">
+              className="px-4 py-2 rounded-full text-sm font-semibold bg-terracotta hover:bg-terracotta/90 text-white transition-colors btn-press shadow-lg shadow-terracotta/20">
               {t("nav.post")}
             </Link>
           </div>
@@ -182,7 +183,7 @@ export default function Header() {
                 className={cn(
                   "block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   pathname === href
-                    ? "text-terracotta bg-terracotta/10 border border-terracotta/20"
+                    ? "text-terracotta bg-terracotta/10"
                     : "text-cream/70 hover:text-cream hover:bg-white/8"
                 )}>
                 {label}
@@ -196,8 +197,8 @@ export default function Header() {
                     className={cn(
                       "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors",
                       locale === l.code
-                        ? "bg-terracotta text-white border border-terracotta/50"
-                        : "bg-white/8 text-cream/60 hover:bg-white/12 border border-transparent"
+                        ? "bg-terracotta text-white"
+                        : "bg-white/8 text-cream/60 hover:bg-white/12"
                     )}>
                     {l.flag} {l.code.toUpperCase()}
                   </button>
@@ -227,7 +228,7 @@ export default function Header() {
                 </Link>
               )}
               <Link href="/publicar-anuncio"
-                className="block mx-4 mt-2 py-2.5 text-center rounded-full text-sm font-semibold bg-terracotta text-white hover:bg-terracotta/90 transition-colors">
+                className="block mx-4 mt-2 py-2.5 text-center rounded-full text-sm font-semibold bg-terracotta text-white">
                 {t("nav.post")}
               </Link>
             </div>

@@ -13,7 +13,6 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       role?: string;
-      accountType?: string;
       verified?: boolean;
       phone?: string | null;
       city?: string | null;
@@ -22,14 +21,13 @@ declare module "next-auth" {
   interface User {
     id: string;
     role?: string;
-    accountType?: string;
     verified?: boolean;
     phone?: string | null;
     city?: string | null;
   }
 }
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
@@ -38,10 +36,6 @@ export const authOptions: NextAuthOptions = {
       from: process.env.EMAIL_FROM ?? "Eyooly <noreply@eyooly.com>",
       sendVerificationRequest: async ({ identifier: email, url, provider }) => {
         const { host } = new URL(url);
-        if (!resend) {
-          console.warn("[NextAuth] Resend API key not configured. Skipping email send.");
-          return;
-        }
         try {
           await resend.emails.send({
             from: provider.from as string,
@@ -73,11 +67,10 @@ export const authOptions: NextAuthOptions = {
         // Fetch role and verified status from DB
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
-          select: { role: true, accountType: true, verified: true, phone: true, city: true },
+          select: { role: true, verified: true, phone: true, city: true },
         });
         if (dbUser) {
           session.user.role = dbUser.role;
-          session.user.accountType = dbUser.accountType;
           session.user.verified = dbUser.verified;
           session.user.phone = dbUser.phone;
           session.user.city = dbUser.city;

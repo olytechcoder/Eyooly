@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MapPin, Apple, Play } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 // ─── Inline SVG social icons ─────────────────────────────────────────────────
 // Using official brand-accurate SVG paths — no external dependency needed.
@@ -83,50 +83,15 @@ function SocialButton({
       rel="noopener noreferrer"
       aria-label={label}
       className={[
-        "group w-10 h-10 rounded-full flex items-center justify-center",
-        "bg-white/8 border border-white/10",
-        "text-cream/60",
-        "hover:bg-terracotta/20 hover:border-terracotta/40 hover:text-terracotta",
-        "transition-all duration-300",
+        "group w-9 h-9 rounded-full flex items-center justify-center",
+        "bg-white/6 border border-white/8",
+        "text-[#f5f2ed]/60",
+        "hover:bg-terracotta/15 hover:border-terracotta/30 hover:text-[#c9735a]",
+        "transition-all duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/60",
       ].join(" ")}
     >
-      <Icon className="w-5 h-5 transition-colors duration-300" />
-    </a>
-  );
-}
-
-// ─── App Store Badge Component ────────────────────────────────────────────────
-
-function AppStoreBadge({
-  platform,
-  href,
-}: {
-  platform: "apple" | "google";
-  href: string;
-}) {
-  const isApple = platform === "apple";
-  
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-white/8 border border-white/10 rounded-xl hover:bg-white/12 hover:border-white/20 transition-all duration-300 group"
-    >
-      {isApple ? (
-        <Apple className="h-5 w-5 text-cream/70 group-hover:text-cream transition-colors" />
-      ) : (
-        <Play className="h-5 w-5 text-cream/70 group-hover:text-cream transition-colors" />
-      )}
-      <div className="text-left">
-        <div className="text-xs text-cream/50 group-hover:text-cream/70 transition-colors">
-          {isApple ? "Descargar en" : "Disponible en"}
-        </div>
-        <div className="text-sm font-semibold text-cream group-hover:text-cream transition-colors">
-          {isApple ? "App Store" : "Google Play"}
-        </div>
-      </div>
+      <Icon className="w-[18px] h-[18px] transition-colors duration-200" />
     </a>
   );
 }
@@ -154,56 +119,90 @@ export default function Footer() {
 
   return (
     <footer className="bg-carbon border-t border-white/6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
 
           {/* ── Brand column ── */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-6" aria-label="Eyooly — Inicio">
+            <Link href="/" className="inline-block mb-5" aria-label="Eyooly — Inicio">
               <Image
                 src="/assets/eyooly_logo.png"
                 alt="Eyooly"
                 width={180}
                 height={54}
-                className="h-12 w-auto object-contain sm:h-13 lg:h-14 transition-all duration-300"
+                className="h-12 w-auto object-contain sm:h-13 lg:h-14"
                 style={{ maxWidth: "180px" }}
               />
             </Link>
 
-            <p className="text-cream/50 text-sm leading-relaxed max-w-xs mb-5">
+            <p className="text-cream/50 text-sm leading-relaxed max-w-xs mb-4">
               {t("footer.tagline")}
             </p>
 
-            <div className="flex items-center gap-1.5 text-cream/40 text-sm mb-8">
-              <MapPin className="h-4 w-4 text-terracotta shrink-0" />
+            <div className="flex items-center gap-1.5 text-cream/40 text-sm mb-6">
+              <MapPin className="h-3.5 w-3.5 text-terracotta shrink-0" />
               Malabo, Guinea Ecuatorial
             </div>
 
             {/* Social icons */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-2.5">
               {SOCIAL_LINKS.map(({ href, label, Icon }) => (
                 <SocialButton key={label} href={href} label={label} Icon={Icon} />
               ))}
             </div>
 
-            {/* App Store Badges */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <AppStoreBadge platform="apple" href="https://www.apple.com/app-store/" />
-              <AppStoreBadge platform="google" href="https://play.google.com/store/" />
+            {/* Handle hint — subtle, below icons */}
+            <p className="text-cream/25 text-xs mt-3 tracking-wide">@eyoooly</p>
+
+            {/* App store badges */}
+            <div className="flex flex-wrap gap-3 mt-6">
+              {/* Apple App Store */}
+              <a
+                href="https://www.apple.com/app-store/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Descargar en App Store"
+                className="flex items-center gap-2 px-3.5 py-2 bg-white/6 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/16 transition-all duration-200 group"
+              >
+                <svg className="w-5 h-5 text-cream/70 group-hover:text-cream transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                </svg>
+                <div>
+                  <div className="text-cream/35 text-[9px] leading-none mb-0.5">Disponible en</div>
+                  <div className="text-cream/80 text-xs font-semibold leading-none group-hover:text-cream transition-colors">App Store</div>
+                </div>
+              </a>
+
+              {/* Google Play */}
+              <a
+                href="https://play.google.com/store/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Descargar en Google Play"
+                className="flex items-center gap-2 px-3.5 py-2 bg-white/6 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/16 transition-all duration-200 group"
+              >
+                <svg className="w-5 h-5 text-cream/70 group-hover:text-cream transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.18 23.76c.3.17.64.24.99.2l12.6-7.27-2.72-2.72-10.87 9.79zm-1.5-20.5c-.1.27-.17.57-.17.89v19.7c0 .32.06.62.17.89l.09.09 11.04-11.04v-.26L1.77 3.17l-.09.09zm19.07 9.26l-2.64-1.52-3.01 3.01 3.01 3.01 2.66-1.53c.76-.44.76-1.54-.02-1.97zm-17.57 9.24l12.6-7.27-2.72-2.72L3.18.24c-.35-.04-.69.03-.99.2-.72.42-.72 1.48 0 1.9l.99.62z" />
+                </svg>
+                <div>
+                  <div className="text-cream/35 text-[9px] leading-none mb-0.5">Disponible en</div>
+                  <div className="text-cream/80 text-xs font-semibold leading-none group-hover:text-cream transition-colors">Google Play</div>
+                </div>
+              </a>
             </div>
           </div>
 
           {/* ── Services column ── */}
           <div>
-            <h4 className="text-cream text-xs font-semibold uppercase tracking-widest mb-5">
+            <h4 className="text-cream text-xs font-semibold uppercase tracking-widest mb-4">
               Servicios
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {services.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-cream/50 hover:text-cream text-sm transition-colors duration-200"
+                    className="text-cream/50 hover:text-cream text-sm transition-colors"
                   >
                     {label}
                   </Link>
@@ -214,15 +213,15 @@ export default function Footer() {
 
           {/* ── Company column ── */}
           <div>
-            <h4 className="text-cream text-xs font-semibold uppercase tracking-widest mb-5">
+            <h4 className="text-cream text-xs font-semibold uppercase tracking-widest mb-4">
               Empresa
             </h4>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-2.5">
               {company.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-cream/50 hover:text-cream text-sm transition-colors duration-200"
+                    className="text-cream/50 hover:text-cream text-sm transition-colors"
                   >
                     {label}
                   </Link>
@@ -231,11 +230,11 @@ export default function Footer() {
             </ul>
 
             {/* Waitlist CTA */}
-            <div className="p-4 bg-gradient-to-br from-terracotta/15 to-terracotta/5 border border-terracotta/20 rounded-xl">
-              <p className="text-cream/70 text-xs mb-2.5 font-medium">Únete a la lista de espera</p>
+            <div className="mt-6 p-4 bg-terracotta/10 border border-terracotta/20 rounded-xl">
+              <p className="text-cream/70 text-xs mb-2">Únete a la lista de espera</p>
               <Link
                 href="/#waitlist"
-                className="inline-flex items-center gap-1.5 text-terracotta text-sm font-semibold hover:text-terracotta/80 transition-colors duration-200"
+                className="text-terracotta text-sm font-medium hover:text-terracotta/80 transition-colors"
               >
                 Registrarme →
               </Link>
@@ -243,17 +242,14 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Divider ── */}
-        <div className="border-t border-white/6 my-8" />
-
         {/* ── Bottom bar ── */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-6 border-t border-white/6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-cream/30 text-xs">
             © {year} Eyooly. {t("footer.rights")}.
           </p>
 
           {/* Social icons repeated in bottom bar on desktop for balance */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2">
             {SOCIAL_LINKS.map(({ href, label, Icon }) => (
               <a
                 key={label}
@@ -261,7 +257,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="text-cream/30 hover:text-terracotta transition-colors duration-200"
+                className="text-cream/25 hover:text-[#b7baad] transition-colors duration-200"
               >
                 <Icon className="w-4 h-4" />
               </a>
@@ -271,13 +267,13 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <Link
               href="/privacy"
-              className="text-cream/30 hover:text-cream/60 text-xs transition-colors duration-200"
+              className="text-cream/30 hover:text-cream/60 text-xs transition-colors"
             >
               {t("footer.privacy")}
             </Link>
             <Link
               href="/terms"
-              className="text-cream/30 hover:text-cream/60 text-xs transition-colors duration-200"
+              className="text-cream/30 hover:text-cream/60 text-xs transition-colors"
             >
               {t("footer.terms")}
             </Link>

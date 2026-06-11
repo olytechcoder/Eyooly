@@ -36,11 +36,11 @@ export default function ContactPage() {
             {/* Info */}
             <div className="space-y-5">
               {[
-                { icon: Mail,    title: "Email",     value: "hola@eyooly.com", href: "mailto:hola@eyooly.com" },
-                { icon: Phone,   title: "WhatsApp",  value: "+240 555 271 524", href: "https://wa.me/240555271524" },
-                { icon: Mail,    title: "Soporte",   value: "ayud@eyooly.com", href: "mailto:ayud@eyooly.com" },
-              ].map(({ icon: Icon, title, value, href }) => (
-                <a key={title} href={href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition-opacity">
+                { icon: Mail,    title: "Email",     value: "hola@eyooly.com" },
+                { icon: Phone,   title: "WhatsApp",  value: "+240 XXX XXX XXX" },
+                { icon: MapPin,  title: "Ubicación", value: "Malabo, Guinea Ecuatorial" },
+              ].map(({ icon: Icon, title, value }) => (
+                <div key={title} className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-terracotta/10 flex items-center justify-center shrink-0">
                     <Icon className="h-5 w-5 text-terracotta" />
                   </div>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                     <p className="text-xs font-medium text-carbon/50 mb-0.5">{title}</p>
                     <p className="text-carbon font-medium text-sm">{value}</p>
                   </div>
-                </a>
+                </div>
               ))}
 
               <div className="pt-4 border-t border-carbon/8">

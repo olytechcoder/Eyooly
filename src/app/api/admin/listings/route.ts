@@ -1,92 +1,45 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ListingStatus } from "@prisma/client";
 
-async function isAdmin(email: string | undefined) {
-  if (!email) return false;
-  const user = await prisma.user.findUnique({
-    where: { email },
-    select: { role: true },
-  });
-  return user?.role === "ADMIN";
+function checkAdminKey(req: NextRequest) {
+  const key = req.headers.get("x-admin-key");
+  return !!process.env.ADMIN_SECRET && key === process.env.ADMIN_SECRET;
 }
 
 export async function GET(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email || !(await isAdmin(session.user.email))) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 403 });
-    }
-
-    const { searchParams } = new URL(req.url);
-    const statusParam = searchParams.get("status") || "PENDING";
-    const status = statusParam as ListingStatus;
-
-    const listings = await prisma.listing.findMany({
-      where: { status },
-      include: {
-        category: true,
-        user: { select: { name: true, email: true } },
-        images: { take: 1 },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-    });
-
-    return NextResponse.json({ listings });
-  } catch (error) {
-    console.error("[GET /api/admin/listings]", error);
-    return NextResponse.json(
-      { error: "Error al obtener listados" },
-      { status: 500 }
-    );
+  if (!checkAdminKey(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-}
-
-export async function PATCH(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email || !(await isAdmin(session.user.email))) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+    const { searchParams } = new URL(req.url);
+    const status = searchParams.get("status") ?? "PENDING";
+    const page   = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
+    const limit  = Math.min(50, parseInt(searchParams.get("limit") ?? "20"));
+    const skip   = (page - 1) * limit;
+
+    const where: any = {};
+    if (status && Object.values(ListingStatus).includes(status as ListingStatus)) {
+      where.status = status as ListingStatus;
     }
 
-    const { listingId, status: statusParam, note } = await req.json();
-    const status = statusParam as ListingStatus;
+    const [listings, total] = await Promise.all([
+      prisma.listing.findMany({
+        where,
+        include: {
+          category: { select: { nameEs: true, icon: true, slug: true } },
+          images:   { orderBy: { sortOrder: "asc" }, take: 1 },
+        },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.listing.count({ where }),
+    ]);
 
-    if (!listingId || !["APPROVED", "REJECTED"].includes(status)) {
-      return NextResponse.json(
-        { error: "Parámetros inválidos" },
-        { status: 400 }
-      );
-    }
-
-    const listing = await prisma.listing.update({
-      where: { id: listingId },
-      data: { status },
-    });
-
-    // Log admin action
-    await prisma.adminAction.create({
-      data: {
-        adminEmail: session.user.email,
-        action: status === "APPROVED" ? "approve_listing" : "reject_listing",
-        targetId: listingId.toString(),
-        targetType: "listing",
-        note: note || null,
-      },
-    });
-
-    return NextResponse.json({ listing });
-  } catch (error) {
-    console.error("[PATCH /api/admin/listings]", error);
-    return NextResponse.json(
-      { error: "Error al actualizar listado" },
-      { status: 500 }
-    );
+    return NextResponse.json({ listings, total, page, limit });
+  } catch (err) {
+    console.error("[GET /api/admin/listings]", err);
+    return NextResponse.json({ error: "Error al obtener los anuncios." }, { status: 500 });
   }
 }
