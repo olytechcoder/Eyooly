@@ -1,85 +1,53 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const { fullName, email, whatsapp, accountType, password } = await req.json();
+    const body = await req.json();
+    const { email, name, whatsapp, accountType } = body;
 
-    // Validation
-    if (!email || !fullName || !whatsapp) {
+    if (!email || !whatsapp) {
       return NextResponse.json(
-        { error: "Missing required fields: email, fullName, and whatsapp are required" },
+        { error: "Email and WhatsApp are required" },
         { status: 400 }
       );
     }
 
-    // Check if user already exists
+    // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Email already registered" },
-        { status: 409 }
+        { error: "User already exists" },
+        { status: 400 }
       );
     }
 
-    // Updated account type mapping
-const accountTypeMap: Record<string, any> = {
-  "Comprador": "BUYER",
-  "Buyer": "BUYER",
-  "Vendedor de marketplace": "MARKETPLACE_VENDOR",
-  "Marketplace vendor": "MARKETPLACE_VENDOR",
-  "Vendedor ecommerce": "ECOMMERCE_VENDOR",
-  "Ecommerce vendor": "ECOMMERCE_VENDOR",
-  "Restaurante / negocio de comida": "RESTAURANT",
-  "Restaurant / food business": "RESTAURANT",
-  "Repartidor / dispatch": "DISPATCH_PARTNER",
-  "Dispatch / delivery partner": "DISPATCH_PARTNER",
-  "Conductor": "DRIVER",
-  "Driver": "DRIVER",
-};
+    // Map account type if needed (based on the error log's 'mappedAccountType')
+    const mappedAccountType = accountType || "PERSONAL";
 
-    const mappedAccountType = accountTypeMap[accountType] || "buyer";
-
-    // Prepare user data
-    const userData: any = {
-      email,
-      name: fullName,
-      phone: whatsapp,
-      role: "USER",
-      accountType: mappedAccountType,
-      emailVerified: null,
-    };
-
-    // Add password if provided
-    if (password) {
-      userData.password = await bcrypt.hash(password, 10);
-    }
-
-    // Create new user
+    // Create user
     const user = await prisma.user.create({
-      data: userData,
+      data: {
+        email,
+        name,
+        phone: whatsapp,
+        role: "USER" as any,
+        accountType: mappedAccountType,
+        emailVerified: null,
+      },
     });
 
-    // Return success without sensitive data
     return NextResponse.json(
-      { 
-        success: true, 
-        userId: user.id,
-        message: "User registered successfully"
-      },
+      { message: "User registered successfully", user },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("[REGISTER_ERROR]", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

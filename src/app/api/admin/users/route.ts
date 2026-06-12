@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
           phone:     true,
           city:      true,
           role:      true,
-          verified:  true,
+          verified:  true, accountType: true,
           createdAt: true,
           _count:    { select: { listings: true } },
         },

@@ -16,6 +16,8 @@ declare module "next-auth" {
       verified?: boolean;
       phone?: string | null;
       city?: string | null;
+    accountType?: string | null;
+      accountType?: string | null;
     };
   }
   interface User {
@@ -24,6 +26,8 @@ declare module "next-auth" {
     verified?: boolean;
     phone?: string | null;
     city?: string | null;
+    accountType?: string | null;
+      accountType?: string | null;
   }
 }
 
@@ -67,13 +71,14 @@ export const authOptions: NextAuthOptions = {
         // Fetch role and verified status from DB
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
-          select: { role: true, verified: true, phone: true, city: true },
+          select: { role: true, verified: true, phone: true, city: true, accountType: true },
         });
         if (dbUser) {
           session.user.role = dbUser.role;
           session.user.verified = dbUser.verified;
           session.user.phone = dbUser.phone;
           session.user.city = dbUser.city;
+          session.user.accountType = dbUser.accountType;
         }
       }
       return session;
