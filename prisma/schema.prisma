@@ -78,6 +78,16 @@ enum UserRole {
   ADMIN
 }
 
+// Add AccountType enum if you want strict types
+enum AccountType {
+  BUYER
+  MARKETPLACE_VENDOR
+  ECOMMERCE_VENDOR
+  RESTAURANT
+  DISPATCH_PARTNER
+  DRIVER
+}
+
 // ─── Categories ───────────────────────────────────────────────────────────────
 
 model Category {
@@ -144,7 +154,7 @@ enum ListingStatus {
   REJECTED
 }
 
-// ─ Listing Images ───────────────────────────────────────────────────────────
+// ─── Listing Images ───────────────────────────────────────────────────────────
 
 model ListingImage {
   id        Int     @id @default(autoincrement())
@@ -156,7 +166,7 @@ model ListingImage {
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
-// ─ Saved Listings ───────────────────────────────────────────────────────────
+// ─── Saved Listings ───────────────────────────────────────────────────────────
 
 model SavedListing {
   id        Int      @id @default(autoincrement())
