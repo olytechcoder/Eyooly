@@ -144,7 +144,7 @@ enum ListingStatus {
   REJECTED
 }
 
-// ─── Listing Images ───────────────────────────────────────────────────────────
+// ─ Listing Images ───────────────────────────────────────────────────────────
 
 model ListingImage {
   id        Int     @id @default(autoincrement())
@@ -156,7 +156,7 @@ model ListingImage {
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
-// ─── Saved Listings ───────────────────────────────────────────────────────────
+// ─ Saved Listings ───────────────────────────────────────────────────────────
 
 model SavedListing {
   id        Int      @id @default(autoincrement())
