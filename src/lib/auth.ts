@@ -17,7 +17,6 @@ declare module "next-auth" {
       phone?: string | null;
       city?: string | null;
     accountType?: string | null;
-      accountType?: string | null;
     };
   }
   interface User {
@@ -27,7 +26,6 @@ declare module "next-auth" {
     phone?: string | null;
     city?: string | null;
     accountType?: string | null;
-      accountType?: string | null;
   }
 }
 
